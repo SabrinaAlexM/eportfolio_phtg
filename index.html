@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflexions-Radar · E-Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        :root {
+            --bg:           #F5F4F2;
+            --surface:      #FFFFFF;
+            --border:       #E4E0DB;
+            --text:         #18181B;
+            --text-muted:   #79716C;
+            --accent:       #4F46E5;
+            --accent-light: #EEEEFF;
+            --accent-dark:  #3730A3;
+            --accent-deep:  #1E1B4B;
+            --l0-bg:#D1D5DB;--l0-text:#374151;
+            --l1-bg:#C7D2FE;--l1-text:#3730A3;
+            --l2-bg:#818CF8;--l2-text:#FFFFFF;
+            --l3-bg:#4F46E5;--l3-text:#FFFFFF;
+            --l4-bg:#1E1B4B;--l4-text:#FFFFFF;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);min-height:100vh;color:var(--text);line-height:1.6;}
+
+        .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:44px 40px 36px;text-align:center;}
+        .header-tag{display:inline-block;background:var(--accent);color:white;font-size:.72em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px;}
+        .site-header h1{font-size:clamp(1.9em,5vw,3em);font-weight:900;line-height:1.08;letter-spacing:-.03em;margin-bottom:12px;}
+        .site-header h1 span{color:var(--accent);}
+        .site-header .subtitle{color:var(--text-muted);font-size:.97em;max-width:480px;margin:0 auto;}
+
+        .mode-bar{background:var(--surface);border-bottom:2px solid var(--border);display:flex;justify-content:center;padding:0 20px;}
+        .mode-inner{display:flex;}
+        .mode-btn{padding:13px 22px;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;background:transparent;font-family:Arial,Helvetica,sans-serif;font-size:.88em;font-weight:700;color:var(--text-muted);cursor:pointer;transition:color .2s,border-color .2s;display:flex;align-items:center;gap:7px;}
+        .mode-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+        .step-nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;justify-content:center;padding:0 20px;overflow-x:auto;}
+        .step-nav-inner{display:flex;}
+        .step-tab{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:3px solid transparent;color:var(--text-muted);font-size:.81em;font-weight:600;white-space:nowrap;transition:color .2s,border-color .2s;}
+        .step-tab.active{border-bottom-color:var(--accent);color:var(--accent);}
+        .step-tab.done{color:var(--accent-dark);}
+        .step-tab-num{width:21px;height:21px;border-radius:50%;background:var(--border);color:var(--text-muted);font-size:.74em;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s;}
+        .step-tab.active .step-tab-num{background:var(--accent);color:white;}
+        .step-tab.done .step-tab-num{background:var(--accent-dark);color:white;}
+
+        .main{max-width:860px;margin:0 auto;padding:36px 24px 80px;}
+        .mode-panel{display:none;}.mode-panel.active{display:block;}
+        .section{display:none;}.section.active{display:block;}
+
+        .card{background:var(--surface);border-radius:12px;padding:26px 30px;margin-bottom:16px;border:1px solid var(--border);}
+        .card-title{font-size:1.1em;font-weight:800;letter-spacing:-.02em;margin-bottom:12px;}
+        .card p{color:var(--text-muted);line-height:1.75;font-size:.93em;margin-bottom:9px;}
+        .card p:last-child{margin-bottom:0;}.card p strong{color:var(--text);}
+        .highlight{background:var(--accent-light);border-left:3px solid var(--accent);padding:11px 15px;border-radius:0 8px 8px 0;margin-top:14px;color:var(--accent-dark);font-size:.86em;line-height:1.6;}
+
+        .steps-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px;}
+        @media(min-width:560px){.steps-grid{grid-template-columns:repeat(5,1fr);}}
+        .step-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px 12px;text-align:center;}
+        .step-circle{width:32px;height:32px;border-radius:50%;background:var(--accent);color:white;font-weight:900;font-size:.9em;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;}
+        .step-card h3{font-size:.84em;font-weight:700;margin-bottom:3px;}
+        .step-card p{font-size:.76em;color:var(--text-muted);margin:0;line-height:1.4;}
+
+        .level-list{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+        .level-row{display:flex;align-items:flex-start;gap:12px;}
+        .lv-box{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1em;flex-shrink:0;}
+        .lv0{background:var(--l0-bg);color:var(--l0-text);}.lv1{background:var(--l1-bg);color:var(--l1-text);}
+        .lv2{background:var(--l2-bg);color:var(--l2-text);}.lv3{background:var(--l3-bg);color:var(--l3-text);}
+        .lv4{background:var(--l4-bg);color:var(--l4-text);}
+        .level-row strong{display:block;font-size:.9em;font-weight:700;margin-bottom:1px;}
+        .level-row p{font-size:.83em;color:var(--text-muted);margin:0;line-height:1.45;}
+
+        .sf-toggle-row{display:flex;gap:10px;margin-bottom:12px;}
+        .btn-small{background:transparent;border:1.5px solid var(--border);color:var(--text-muted);padding:5px 13px;border-radius:6px;font-size:.79em;font-weight:700;cursor:pointer;font-family:Arial,Helvetica,sans-serif;transition:border-color .15s,color .15s;}
+        .btn-small:hover{border-color:var(--accent);color:var(--accent);}
+        .sf-grid{display:flex;flex-direction:column;gap:7px;margin-top:4px;}
+        .sf-item{display:flex;align-items:center;gap:11px;padding:12px 15px;border-radius:9px;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s;}
+        .sf-item:hover{border-color:var(--accent);background:var(--accent-light);}
+        .sf-item.checked{border-color:var(--accent);background:var(--accent-light);}
+        .sf-item input[type="checkbox"]{width:16px;height:16px;cursor:pointer;flex-shrink:0;accent-color:var(--accent);}
+        .sf-num{min-width:23px;height:23px;background:var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.75em;font-weight:900;color:var(--text-muted);flex-shrink:0;transition:background .15s,color .15s;}
+        .sf-item.checked .sf-num{background:var(--accent);color:white;}
+        .sf-label{font-size:.89em;font-weight:600;}
+        .sf-error{color:#DC2626;font-size:.84em;font-weight:600;margin-top:8px;display:none;}
+
+        .info-banner{background:var(--accent-light);border-radius:10px;padding:13px 17px;margin-bottom:20px;}
+        .info-banner p{color:var(--accent-dark);font-size:.87em;line-height:1.6;margin:0;}
+        .info-banner p strong{color:var(--accent-deep);}
+
+        /* adj section header */
+        .adj-section-head{font-size:.78em;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);padding:10px 0 6px;}
+        .adj-section-head.dimmed{color:#B0ABA5;}
+
+        .question-group{margin-bottom:22px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+        .group-head{background:var(--accent);color:white;padding:12px 18px;display:flex;align-items:center;gap:10px;}
+        .group-idx{width:23px;height:23px;border-radius:50%;background:rgba(255,255,255,.2);font-size:.76em;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .group-head h3{font-size:.9em;font-weight:700;}
+        .question{background:var(--surface);padding:16px 18px;border-top:1px solid var(--border);}
+        .question-text{display:block;font-size:.88em;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.5;}
+        .radio-group{display:flex;flex-direction:column;gap:5px;}
+        .radio-option{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;border:1.5px solid transparent;background:var(--bg);transition:border-color .15s,background .15s;}
+        .radio-option:hover{border-color:var(--accent);background:var(--accent-light);}
+        .radio-option input[type="radio"]{width:15px;height:15px;cursor:pointer;flex-shrink:0;accent-color:var(--accent);}
+        .radio-option label{cursor:pointer;display:flex;align-items:center;gap:7px;font-size:.85em;flex:1;}
+        .level-swatch{width:15px;height:15px;border-radius:3px;flex-shrink:0;}
+        .sw0{background:var(--l0-bg);}.sw1{background:var(--l1-bg);}.sw2{background:var(--l2-bg);}.sw3{background:var(--l3-bg);}.sw4{background:var(--l4-bg);}
+
+        .adj-grid{display:flex;flex-direction:column;gap:11px;}
+        .adj-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px 18px;}
+        .adj-label{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
+        .field-num{background:var(--accent);color:white;border-radius:4px;min-width:21px;height:21px;display:flex;align-items:center;justify-content:center;font-size:.72em;font-weight:900;flex-shrink:0;padding:0 3px;}
+        .adj-label span:last-child{font-size:.86em;font-weight:700;}
+        .slider-row{display:flex;align-items:center;gap:11px;}
+        .range-num{font-size:.76em;font-weight:700;color:var(--text-muted);min-width:11px;}
+        input[type="range"]{flex:1;height:5px;border-radius:3px;background:var(--border);outline:none;-webkit-appearance:none;cursor:pointer;}
+        input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid white;box-shadow:0 0 0 1.5px var(--accent);transition:transform .15s;}
+        input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
+        input[type="range"]::-moz-range-thumb{width:19px;height:19px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid white;}
+        .value-pill{min-width:40px;text-align:center;background:var(--accent);color:white;border-radius:20px;padding:2px 9px;font-size:.83em;font-weight:900;}
+
+        .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;}
+        .chart-inner{position:relative;max-width:720px;height:720px;margin:0 auto;}
+        canvas{cursor:grab;}canvas:active{cursor:grabbing;}
+
+        .color-picker-row{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--bg);border-radius:9px;margin-top:14px;flex-wrap:wrap;}
+        .color-picker-row label{font-size:.81em;font-weight:700;color:var(--text-muted);}
+        .color-swatches{display:flex;gap:7px;flex-wrap:wrap;}
+        .c-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:transform .15s,border-color .15s;outline:none;}
+        .c-swatch:hover{transform:scale(1.15);}
+        .c-swatch.selected{border-color:var(--text);box-shadow:0 0 0 2px white inset;}
+
+        .chart-legend-row{display:flex;align-items:center;justify-content:center;gap:18px;padding:12px 0 2px;flex-wrap:wrap;}
+        .legend-sample{width:28px;height:14px;border-radius:3px;border:2px solid;display:inline-block;flex-shrink:0;}
+        .legend-label-txt{font-size:.82em;font-weight:600;color:var(--text);}
+
+        .compare-legend{display:flex;align-items:center;gap:18px;padding:11px 15px;background:var(--bg);border-radius:9px;margin-bottom:14px;flex-wrap:wrap;}
+        .legend-dot{display:flex;align-items:center;gap:7px;font-size:.83em;font-weight:600;}
+        .dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;}
+
+        .compare-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px;}
+        .summary-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;}
+        .summary-title{font-size:.77em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;}
+        .summary-card.improved .summary-title{color:#059669;}
+        .summary-card.declined .summary-title{color:#DC2626;}
+        .summary-card.unchanged .summary-title{color:var(--text-muted);}
+        .summary-item{display:flex;align-items:center;gap:8px;font-size:.82em;margin-bottom:6px;}
+        .summary-item:last-child{margin-bottom:0;}
+        .s-num{min-width:20px;height:20px;border-radius:4px;background:var(--bg);border:1px solid var(--border);font-size:.74em;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .delta-badge{font-size:.75em;font-weight:700;margin-left:auto;padding:1px 6px;border-radius:10px;}
+        .delta-pos{background:#D1FAE5;color:#065F46;}.delta-neg{background:#FEE2E2;color:#991B1B;}
+        .summary-empty{font-size:.82em;color:var(--text-muted);font-style:italic;}
+
+        .btn-row{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-top:32px;}
+        .btn{background:var(--accent);color:white;border:none;padding:12px 30px;border-radius:8px;font-size:.88em;font-weight:700;cursor:pointer;font-family:Arial,Helvetica,sans-serif;transition:background .2s,transform .15s;}
+        .btn:hover{background:var(--accent-dark);transform:translateY(-1px);}.btn:active{transform:translateY(0);}
+        .btn-outline{background:transparent;color:var(--text-muted);border:1.5px solid var(--border);padding:11px 30px;border-radius:8px;font-size:.88em;font-weight:700;cursor:pointer;font-family:Arial,Helvetica,sans-serif;transition:border-color .2s,color .2s;}
+        .btn-outline:hover{border-color:var(--text-muted);color:var(--text);}
+
+        @media(max-width:560px){
+            .site-header{padding:28px 16px;}.main{padding:24px 14px 60px;}.card{padding:18px;}
+            .chart-inner{height:340px;}.step-tab{padding:12px 10px;font-size:.76em;}
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-tag">E-Portfolio · Studiengang Primarstufe</div>
+    <h1>Reflexions-<span>Radar</span></h1>
+    <p class="subtitle">Selbstbeurteilung der Reflexionstiefe über die 10 Standardfelder</p>
+</header>
+
+<div class="mode-bar">
+    <div class="mode-inner">
+        <button class="mode-btn active" id="modeMainBtn" onclick="switchMode('main')">◎ Neue Einschätzung</button>
+        <button class="mode-btn" id="modeCompareBtn" onclick="switchMode('compare')">⟳ Veränderungen darstellen</button>
+    </div>
+</div>
+
+<!-- MAIN PANEL -->
+<div class="mode-panel active" id="modeMain">
+    <nav class="step-nav" id="mainStepNav">
+        <div class="step-nav-inner">
+            <div class="step-tab active" data-step="1"><div class="step-tab-num">1</div><span>Einführung</span></div>
+            <div class="step-tab" data-step="2"><div class="step-tab-num">2</div><span>SF wählen</span></div>
+            <div class="step-tab" data-step="3"><div class="step-tab-num">3</div><span>Fragenkatalog</span></div>
+            <div class="step-tab" data-step="4"><div class="step-tab-num">4</div><span>Anpassung</span></div>
+            <div class="step-tab" data-step="5"><div class="step-tab-num">5</div><span>Visualisierung</span></div>
+        </div>
+    </nav>
+    <main class="main">
+
+        <!-- S1 -->
+        <div id="section1" class="section active">
+            <div class="card">
+                <div class="card-title">Willkommen zum Reflexions-Radar</div>
+                <p><strong>Ziel:</strong> Dieses Tool hilft dir, die Reflexionstiefe deiner Portfolio-Einträge zu den 10 Standardfeldern systematisch zu erfassen und zu visualisieren.</p>
+                <p>Du erkennst, in welchen Bereichen du bereits tiefgehend reflektiert hast – und wo noch Potenzial für vertiefte Reflexion besteht.</p>
+                <div class="highlight">💡 Diese Webseite ist ein Experiment mit dem "Code Claude"-Tool von Anthropic.</div>
+            </div>
+            <div class="card">
+                <div class="card-title">In 5 Schritten zum Ergebnis</div>
+                <div class="steps-grid">
+                    <div class="step-card"><div class="step-circle">1</div><h3>Einführung</h3><p>Reflexionsstufen kennenlernen</p></div>
+                    <div class="step-card"><div class="step-circle">2</div><h3>SF wählen</h3><p>Standardfelder für den Fragenkatalog auswählen</p></div>
+                    <div class="step-card"><div class="step-circle">3</div><h3>Fragenkatalog</h3><p>Aussagen bewerten (0–4)</p></div>
+                    <div class="step-card"><div class="step-circle">4</div><h3>Anpassung</h3><p>Alle 10 SF prüfen und anpassen</p></div>
+                    <div class="step-card"><div class="step-circle">5</div><h3>Visualisierung</h3><p>Radar-Chart anschauen &amp; herunterladen</p></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Die 5 Reflexionsstufen</div>
+                <p style="font-style:italic;margin-bottom:14px;">"Auf welcher Reflexionsstufe habe ich diese Kompetenz in meinem Portfolio dokumentiert und reflektiert?"</p>
+                <div class="level-list">
+                    <div class="level-row"><div class="lv-box lv0">0</div><div><strong>Keine Ausprägung</strong><p>Noch keine Dokumentation oder Evidenz zu dieser Kompetenz im Portfolio vorhanden.</p></div></div>
+                    <div class="level-row"><div class="lv-box lv1">1</div><div><strong>Beschreiben</strong><p>Beschreibung, was getan wurde. Reine Dokumentation ohne Reflexion.</p></div></div>
+                    <div class="level-row"><div class="lv-box lv2">2</div><div><strong>Beschreibende Reflexion</strong><p>Beschreibung, wie es sich angefühlt hat und was dabei gedacht oder gelernt wurde. Erste persönliche Schlüsse.</p></div></div>
+                    <div class="level-row"><div class="lv-box lv3">3</div><div><strong>Dialogische Reflexion</strong><p>Die Erfahrung wird mit externen Perspektiven verbunden (Feedback, Theorie, Austausch) und kritisch hinterfragt.</p></div></div>
+                    <div class="level-row"><div class="lv-box lv4">4</div><div><strong>Kritischer Diskurs</strong><p>Das eigene Handeln wird theoriegeleitet analysiert. Fundierte Haltungen oder Handlungsabsichten werden formuliert.</p></div></div>
+                </div>
+            </div>
+            <div class="btn-row"><button class="btn" id="startBtn">Los geht's →</button></div>
+        </div>
+
+        <!-- S2: SF wählen -->
+        <div id="section2" class="section">
+            <div class="card">
+                <div class="card-title">Für welche Standardfelder möchtest du den Fragenkatalog ausfüllen?</div>
+                <p>Wähle die Standardfelder aus, zu denen du konkrete Portfolio-Einträge hast. Im nächsten Schritt kannst du <strong>alle 10 Standardfelder</strong> manuell anpassen – der Spider-Chart zeigt immer alle 10.</p>
+                <div class="sf-toggle-row">
+                    <button class="btn-small" onclick="toggleAllSF(true)">Alle auswählen</button>
+                    <button class="btn-small" onclick="toggleAllSF(false)">Keine</button>
+                </div>
+                <div class="sf-grid" id="sfGrid"></div>
+                <p class="sf-error" id="sfError">Bitte wähle mindestens ein Standardfeld aus.</p>
+            </div>
+            <div class="btn-row">
+                <button class="btn-outline" onclick="showSection('section1','mainStepNav')">← Zurück</button>
+                <button class="btn" id="sfNextBtn">Zum Fragenkatalog →</button>
+            </div>
+        </div>
+
+        <!-- S3: Fragenkatalog -->
+        <div id="section3" class="section">
+            <div class="info-banner" id="catalogInfo"><p></p></div>
+            <div id="questionsContainer"></div>
+            <div class="btn-row">
+                <button class="btn-outline" onclick="showSection('section2','mainStepNav')">← Zurück</button>
+                <button class="btn" id="completeBtn">Weiter zur Anpassung →</button>
+            </div>
+        </div>
+
+        <!-- S4: Anpassung (immer alle 10 SF) -->
+        <div id="section4" class="section">
+            <div class="info-banner"><p><strong>Alle 10 Standardfelder:</strong> Die Werte der bewerteten Felder wurden aus dem Fragenkatalog berechnet. Passe alle Werte nach deiner persönlichen Einschätzung an.</p></div>
+            <div class="adj-grid" id="adjustmentContainer"></div>
+            <div class="btn-row">
+                <button class="btn-outline" onclick="showSection('section3','mainStepNav')">← Zurück</button>
+                <button class="btn" id="chartBtn">Zum Diagramm →</button>
+            </div>
+        </div>
+
+        <!-- S5: Visualisierung -->
+        <div id="section5" class="section">
+            <div class="info-banner"><p><strong>Interaktiv:</strong> Ziehe die Datenpunkte direkt im Diagramm, um deine Reflexionsstufen anzupassen. Die Schieberegler unten aktualisieren sich automatisch.</p></div>
+            <div class="chart-card">
+                <div class="chart-inner"><canvas id="radarChart"></canvas></div>
+                <div class="chart-legend-row">
+                    <span class="legend-sample" id="mainLegendSample" style="border-color:#4F46E5;background:rgba(79,70,229,0.15)"></span>
+                    <span class="legend-label-txt">Meine Reflexionsstufen</span>
+                </div>
+                <div class="color-picker-row">
+                    <label>Farbe:</label>
+                    <div class="color-swatches" id="mainColorSwatches"></div>
+                </div>
+            </div>
+            <div class="adj-grid" id="finalAdjustmentContainer"></div>
+            <div class="btn-row">
+                <button class="btn-outline" onclick="showSection('section4','mainStepNav')">← Zurück</button>
+                <button class="btn" id="downloadBtn">Diagramm herunterladen</button>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- COMPARE PANEL -->
+<div class="mode-panel" id="modeCompare">
+    <nav class="step-nav" id="compareStepNav">
+        <div class="step-nav-inner">
+            <div class="step-tab active" data-step="1"><div class="step-tab-num">1</div><span>Ausgangslage</span></div>
+            <div class="step-tab" data-step="2"><div class="step-tab-num">2</div><span>Neue Einschätzung</span></div>
+            <div class="step-tab" data-step="3"><div class="step-tab-num">3</div><span>Vergleich</span></div>
+        </div>
+    </nav>
+    <main class="main">
+
+        <div id="csection1" class="section active">
+            <div class="card">
+                <div class="card-title">Ausgangslage erfassen</div>
+                <p>Trage die Reflexionsstufen deiner ersten Einschätzung ein. Diese Werte dienen als Ausgangspunkt für den Vergleich.</p>
+                <p>Noch keine frühere Einschätzung? Setze alle Werte auf 0.</p>
+            </div>
+            <div class="adj-grid" id="baselineContainer"></div>
+            <div class="btn-row"><button class="btn" id="baselineNextBtn">Weiter →</button></div>
+        </div>
+
+        <div id="csection2" class="section">
+            <div class="info-banner"><p><strong>Neue Einschätzung:</strong> Trage deine aktuellen Reflexionsstufen ein. Die Werte sind mit der Ausgangslage vorausgefüllt – passe sie an.</p></div>
+            <div class="adj-grid" id="newValContainer"></div>
+            <div class="btn-row">
+                <button class="btn-outline" onclick="showSection('csection1','compareStepNav')">← Zurück</button>
+                <button class="btn" id="compareChartBtn">Vergleich anzeigen →</button>
+            </div>
+        </div>
+
+        <div id="csection3" class="section">
+            <div class="chart-card">
+                <div class="chart-inner"><canvas id="compareChart"></canvas></div>
+                <div class="chart-legend-row">
+                    <span class="legend-sample" style="border-color:#9CA3AF;background:rgba(156,163,175,0.12)"></span>
+                    <span class="legend-label-txt">Ausgangslage</span>
+                    <span class="legend-sample" id="newLegendSample" style="border-color:#4F46E5;background:rgba(79,70,229,0.15)"></span>
+                    <span class="legend-label-txt">Neue Einschätzung</span>
+                </div>
+                <div class="color-picker-row">
+                    <label>Farbe (Neue Einschätzung):</label>
+                    <div class="color-swatches" id="compareColorSwatches"></div>
+                </div>
+            </div>
+            <div id="compareSummaryContainer"></div>
+            <div class="btn-row">
+                <button class="btn-outline" onclick="showSection('csection2','compareStepNav')">← Zurück</button>
+                <button class="btn" id="compareDownloadBtn">Vergleich herunterladen</button>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const fields = [
+        "Fachwissen und -können","Lernen und Entwickeln","Umgang mit Heterogenität",
+        "Eigenständiges Lernen, kritisches Denken, Problemlösen","Soziales Umfeld","Kommunikation",
+        "Planung, Durchführung und Auswertung von Unterricht","Beurteilung",
+        "Sicherung der Qualität und professionelle Weiterentwicklung",
+        "Schule im Spannungsfeld von Kultur, Gesellschaft, Demokratie, Ökonomie und Ökologie"
+    ];
+
+    const questions = [
+        ["Ich verfüge in den verschiedenen Fächern der Primarstufe über sicheres und strukturiertes Fachwissen.","Ich kann die zentralen Konzepte der unterschiedlichen Fachbereiche verknüpfen (fächerübergreifendes Denken).","Ich weiss, wie sich Primarschulkinder fachspezifisches Wissen (z. B. Schriftspracherwerb, Zahlbegriff) aneignen.","Ich kann Lernumgebungen gestalten, die den Aufbau von Basiskompetenzen in den verschiedenen Fächern ermöglichen.","Ich bin in der Lage, komplexe Sachverhalte so zu elementarisieren, dass sie für Kinder verständlich werden."],
+        ["Ich verstehe die entwicklungspsychologischen Voraussetzungen von Kindern im Primarschulalter.","Ich nehme die individuellen Lernwege der Kinder wahr und kann Lernschwierigkeiten frühzeitig erkennen.","Ich kann Kinder sowohl in der Einzelarbeit als auch in kooperativen Lernformen differenziert begleiten.","Ich fördere die Gesamtpersönlichkeit der Kinder (kognitiv, emotional, sozial) und nicht nur ihre fachliche Leistung.","Ich gestalte Übergänge (z. B. vom Kindergarten in die Schule oder zwischen den Zyklen) kindgerecht."],
+        ["Ich sehe die kulturelle und soziale Vielfalt in meiner Primarklasse als Ressource für das gemeinsame Lernen.","Ich kann meinen Unterricht so differenzieren, dass er sowohl leistungsstarken als auch lernschwächeren Kindern gerecht wird.","Ich gehe sensibel mit den unterschiedlichen sprachlichen Voraussetzungen und dem familiären Hintergrund der Kinder um.","Ich berücksichtige Gender-Aspekte bei der Auswahl von Materialien und in der Interaktion mit den Kindern.","Ich plane meinen Unterricht inklusiv, sodass alle Kinder am Klassengeschehen teilhaben können."],
+        ["Ich vermittle den Kindern Lernstrategien, damit sie zunehmend selbstständig arbeiten können.","Ich rege die Kinder dazu an, Fragen zu stellen, Dinge zu hinterfragen und eigene Lösungswege zu suchen.","Ich biete offene Aufgabenformate an, die kreatives Gestalten und Entdecken ermöglichen.","Ich traue den Kindern Selbststeuerung zu und lasse ihnen Freiräume für eigene Entscheidungen im Lernprozess.","Ich unterstütze die Kinder darin, Verantwortung für ihr eigenes Lernen und ihre Arbeitsmaterialien zu übernehmen."],
+        ["Ich sorge für ein sicheres Klassenklima, in dem sich jedes Kind wertgeschätzt und aufgehoben fühlt.","Ich fördere die soziale Kompetenz der Kinder und leite sie zu einem respektvollen Umgang miteinander an.","Ich verfüge über Strategien, um Konflikte unter Kindern konstruktiv zu lösen und Mobbing präventiv zu begegnen.","Ich beteilige die Kinder an der Gestaltung des Schullebens (z. B. Klassenrat) und nehme ihre Anliegen ernst.","Mein Classroom-Management sorgt für klare Strukturen und Rituale, die den Kindern Orientierung geben."],
+        ["Ich kommuniziere mit den Kindern auf Augenhöhe und in einer altersgerechten Sprache.","Ich pflege eine konstruktive und vertrauensvolle Zusammenarbeit mit den Eltern und Erziehungsberechtigten.","Ich arbeite professionell mit Fachpersonen (Schulische Heilpädagogik, Schulsozialarbeit) und im Klassenteam zusammen.","Ich führe Elterngespräche (z. B. Standortgespräche) lösungsorientiert und transparent.","Ich tausche mich im Kollegium aktiv aus, um Unterricht und Schule gemeinsam weiterzuentwickeln."],
+        ["Ich plane meinen Unterricht basierend auf dem Lehrplan und orientiere mich an den Kompetenzzielen der Stufe.","Ich verknüpfe Unterrichtsinhalte sinnvoll mit der Lebenswelt der Kinder.","Ich kann Unterrichtsreihen über einen längeren Zeitraum strukturiert planen und flexibel anpassen.","Ich setze vielfältige didaktische Methoden ein, um die unterschiedlichen Zugänge der Kinder zu berücksichtigen.","Ich reflektiere nach dem Unterricht, ob die angestrebten Lernziele von den Kindern erreicht wurden."],
+        ["Ich setze Beurteilung primär förderorientiert ein, um den Lernstand der Kinder sichtbar zu machen.","Ich nutze vielfältige Beurteilungsformen (Beobachtung, Produkte, Tests), um ein ganzheitliches Bild zu erhalten.","Ich gebe den Kindern regelmässiges und konkretes Feedback, das sie in ihrem Lernen weiterbringt.","Ich kann Beurteilungen und Noten gegenüber Eltern und Kindern transparent begründen.","Ich vermeide Beschämung und nutze Fehler als Lernanlässe für die Kinder."],
+        ["Ich reflektiere regelmässig mein eigenes pädagogisches Handeln und dessen Wirkung auf die Kinder.","Ich bilde mich gezielt weiter, um den wechselnden Anforderungen der Primarschule gerecht zu werden.","Ich gehe achtsam mit meinen eigenen Ressourcen um (Gesundheit, Belastbarkeit), um langfristig professionell arbeiten zu können.","Ich hole mir aktiv Feedback von Kollegen oder der Schulleitung ein.","Ich richte mein Handeln an den ethischen Grundsätzen des Lehrberufs aus."],
+        ["Ich bin mir bewusst, dass ich als Primarlehrperson eine wichtige Sozialisationsinstanz neben der Familie bin.","Ich verstehe die Schule als Ort, der Kinder auf das Leben in einer demokratischen Gesellschaft vorbereitet.","Ich arbeite mit außerschulischen Partnern (z. B. Vereine, Gemeinde) zusammen, wenn es dem Wohl der Kinder dient.","Ich erkenne gesellschaftliche Herausforderungen (z. B. Digitalisierung, Nachhaltigkeit) und thematisiere sie kindgerecht.","Ich handle im Spannungsfeld zwischen den Erwartungen der Eltern, der Gesellschaft und den Bedürfnissen der Kinder professionell."]
+    ];
+
+    const levels = [
+        {value:0,label:"Keine Ausprägung",sw:"sw0"},{value:1,label:"Beschreiben",sw:"sw1"},
+        {value:2,label:"Beschreibende Reflexion",sw:"sw2"},{value:3,label:"Dialogische Reflexion",sw:"sw3"},
+        {value:4,label:"Kritischer Diskurs",sw:"sw4"}
+    ];
+
+    const palette = [
+        {hex:'#4F46E5',label:'Indigo'},{hex:'#def428',label:'Gelbgrün (PHTG)'},
+        {hex:'#0059ff',label:'Blau (PHTG)'},{hex:'#ff9b30',label:'Orange (PHTG)'},
+        {hex:'#0b1b53',label:'Navy (PHTG)'},{hex:'#761e2a',label:'Bordeaux (PHTG)'},
+        {hex:'#005046',label:'Dunkelgrün (PHTG)'}
+    ];
+
+    const ALL10 = Array.from({length:10},(_,i)=>i);
+
+    /* State */
+    let selectedFields = [...ALL10];   // SF for questionnaire only
+    let fieldValues    = new Array(10).fill(2);   // always 10 values for chart
+    let baselineValues = new Array(10).fill(0);
+    let compValues     = new Array(10).fill(0);
+    let chartColor     = '#4F46E5';
+    let compColor      = '#4F46E5';
+    let chartInst      = null;
+    let compChartInst  = null;
+
+    /* Mode switch */
+    window.switchMode = function(mode) {
+        document.getElementById('modeMain').classList.toggle('active',mode==='main');
+        document.getElementById('modeCompare').classList.toggle('active',mode==='compare');
+        document.getElementById('modeMainBtn').classList.toggle('active',mode==='main');
+        document.getElementById('modeCompareBtn').classList.toggle('active',mode==='compare');
+        if(mode==='compare') initAdjustment('baselineContainer','bl','updateBaseline',ALL10,baselineValues);
+    };
+
+    /* Step nav */
+    window.showSection = function(id,navId) {
+        document.getElementById(navId).closest('.mode-panel').querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        const n=parseInt(id.replace(/\D/g,''));
+        document.querySelectorAll('#'+navId+' .step-tab').forEach(tab=>{
+            const t=parseInt(tab.dataset.step);
+            tab.classList.toggle('active',t===n);
+            tab.classList.toggle('done',t<n);
+        });
+        window.scrollTo(0,0);
+    };
+
+    /* SF Grid */
+    function initSFGrid() {
+        const grid=document.getElementById('sfGrid');
+        grid.innerHTML='';
+        fields.forEach((f,i)=>{
+            const label=document.createElement('label');
+            label.className='sf-item'+(selectedFields.includes(i)?' checked':'');
+            label.innerHTML=`<input type="checkbox" value="${i}" ${selectedFields.includes(i)?'checked':''}><span class="sf-num">${i+1}</span><span class="sf-label">${f}</span>`;
+            label.querySelector('input').addEventListener('change',e=>{
+                if(e.target.checked){if(!selectedFields.includes(i))selectedFields.push(i);label.classList.add('checked');}
+                else{selectedFields=selectedFields.filter(x=>x!==i);label.classList.remove('checked');}
+                selectedFields.sort((a,b)=>a-b);
+            });
+            grid.appendChild(label);
+        });
+    }
+
+    window.toggleAllSF=function(val){
+        selectedFields=val?[...ALL10]:[];
+        document.querySelectorAll('#sfGrid .sf-item').forEach(item=>{
+            item.classList.toggle('checked',val);
+            item.querySelector('input').checked=val;
+        });
+    };
+
+    /* Questions - only selected SF */
+    function initQuestions() {
+        // Update info banner
+        const names = selectedFields.map(i=>`SF ${i+1}`).join(', ');
+        document.querySelector('#catalogInfo p').innerHTML =
+            `<strong>Fragenkatalog für ${names}.</strong> Die übrigen Standardfelder kannst du im nächsten Schritt manuell bewerten – der Spider-Chart zeigt immer alle 10 SF.`;
+
+        const c=document.getElementById('questionsContainer');
+        c.innerHTML='';
+        selectedFields.forEach(fi=>{
+            const g=document.createElement('div');g.className='question-group';
+            g.innerHTML=`<div class="group-head"><div class="group-idx">${fi+1}</div><h3>${fields[fi]}</h3></div>`;
+            questions[fi].forEach((q,qi)=>{
+                const name=`q${fi}_${qi}`;
+                const d=document.createElement('div');d.className='question';
+                let html=`<label class="question-text">${q}</label><div class="radio-group">`;
+                levels.forEach(lv=>{
+                    html+=`<div class="radio-option"><input type="radio" id="${name}_${lv.value}" name="${name}" value="${lv.value}" ${lv.value===2?'checked':''}><label for="${name}_${lv.value}"><span class="level-swatch ${lv.sw}"></span><strong>${lv.value}</strong> &ndash; ${lv.label}</label></div>`;
+                });
+                html+='</div>';d.innerHTML=html;g.appendChild(d);
+            });
+            c.appendChild(g);
+        });
+    }
+
+    /* Compute means – only for selectedFields, rest unchanged */
+    function completeQuestions() {
+        selectedFields.forEach(fi=>{
+            let sum=0;
+            for(let qi=0;qi<5;qi++){
+                const sel=document.querySelector(`input[name="q${fi}_${qi}"]:checked`);
+                sum+=parseInt(sel.value);
+            }
+            // round to nearest 0.5
+            fieldValues[fi]=Math.round((sum/5)*2)/2;
+        });
+        showSection('section4','mainStepNav');
+        // ALWAYS show all 10 SF in adjustment
+        initAdjustment('adjustmentContainer','adj','updateAdjustment',ALL10,fieldValues);
+    }
+
+    /* Adjustment – step 0.5 */
+    function initAdjustment(cId,prefix,fnName,indices,values) {
+        const c=document.getElementById(cId);c.innerHTML='';
+        indices.forEach(i=>{
+            const id=`${prefix}${i}`;
+            const d=document.createElement('div');d.className='adj-item';
+            d.innerHTML=`
+                <div class="adj-label"><span class="field-num">${i+1}</span><span>${fields[i]}</span></div>
+                <div class="slider-row">
+                    <span class="range-num">0</span>
+                    <input type="range" id="${id}" min="0" max="4" step="0.5" value="${values[i]}"
+                           oninput="window.${fnName}(${i},this.value)">
+                    <span class="range-num">4</span>
+                    <span class="value-pill" id="${id}_val">${parseFloat(values[i]).toFixed(1)}</span>
+                </div>`;
+            c.appendChild(d);
+        });
+    }
+
+    window.updateAdjustment=(i,v)=>{fieldValues[i]=parseFloat(v);document.getElementById(`adj${i}_val`).textContent=parseFloat(v).toFixed(1);};
+    window.updateFinalAdjustment=(i,v)=>{
+        fieldValues[i]=parseFloat(v);
+        document.getElementById(`fadj${i}_val`).textContent=parseFloat(v).toFixed(1);
+        if(chartInst){chartInst.data.datasets[0].data=[...fieldValues];chartInst.update();}
+    };
+    window.updateBaseline=(i,v)=>{baselineValues[i]=parseFloat(v);document.getElementById(`bl${i}_val`).textContent=parseFloat(v).toFixed(1);};
+    window.updateNewVal  =(i,v)=>{compValues[i]=parseFloat(v);document.getElementById(`nv${i}_val`).textContent=parseFloat(v).toFixed(1);};
+
+    /* Color swatches */
+    function buildSwatches(cId,current,onChange) {
+        const c=document.getElementById(cId);c.innerHTML='';
+        palette.forEach(p=>{
+            const btn=document.createElement('button');
+            btn.className='c-swatch'+(p.hex===current?' selected':'');
+            btn.style.background=p.hex;btn.title=p.label;
+            btn.addEventListener('click',()=>{
+                c.querySelectorAll('.c-swatch').forEach(s=>s.classList.remove('selected'));
+                btn.classList.add('selected');onChange(p.hex);
+            });
+            c.appendChild(btn);
+        });
+    }
+
+    function rgba(hex,a){
+        const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+        return `rgba(${r},${g},${b},${a})`;
+    }
+
+    /* Main chart – always 10 SF */
+    function showChart() {
+        showSection('section5','mainStepNav');
+        buildSwatches('mainColorSwatches',chartColor,color=>{
+            chartColor=color;
+            if(!chartInst)return;
+            const ds=chartInst.data.datasets[0];
+            ds.borderColor=rgba(color,1);ds.backgroundColor=rgba(color,0.15);
+            ds.pointBackgroundColor=rgba(color,1);ds.pointHoverBorderColor=rgba(color,1);
+            chartInst.update();
+            const s=document.getElementById('mainLegendSample');
+            if(s){s.style.borderColor=color;s.style.background=rgba(color,0.15);}
+        });
+        initMainChart();
+        initAdjustment('finalAdjustmentContainer','fadj','updateFinalAdjustment',ALL10,fieldValues);
+    }
+
+    function initMainChart() {
+        const ctx=document.getElementById('radarChart');
+        if(chartInst)chartInst.destroy();
+        chartInst=new Chart(ctx,{
+            type:'radar',
+            data:{labels:fields,datasets:[{
+                label:'Meine Reflexionsstufen',
+                data:[...fieldValues],
+                backgroundColor:rgba(chartColor,0.15),
+                borderColor:rgba(chartColor,1),
+                borderWidth:2,
+                pointRadius:0,
+                pointHoverRadius:0,
+                pointHitRadius:16,
+                pointBorderWidth:0
+            }]},
+            options:radarOpts(),
+            plugins:[sfLabelPlugin]
+        });
+        setupDrag(chartInst,'radarChart',ALL10,fieldValues,(i,v)=>{
+            fieldValues[i]=v;
+            const sl=document.getElementById(`fadj${i}`);
+            if(sl){sl.value=v;document.getElementById(`fadj${i}_val`).textContent=v.toFixed(1);}
+        });
+    }
+
+    /* Drag – snap to 0.5 */
+    function setupDrag(inst,canvasId,idxMap,vals,onUpdate) {
+        const canvas=document.getElementById(canvasId);
+        let dragging=false;
+        canvas.addEventListener('mousedown',e=>{
+            dragging=true;canvas.style.cursor='grabbing';
+        });
+        canvas.addEventListener('mousemove',e=>{
+            if(!dragging)return;
+            const rect=canvas.getBoundingClientRect(),sc=inst.scales.r;
+            const dx=e.clientX-rect.left-sc.xCenter,dy=e.clientY-rect.top-sc.yCenter;
+            const dist=Math.sqrt(dx*dx+dy*dy),angle=Math.atan2(dy,dx);
+            let best=-1,bestD=Infinity;
+            inst.data.labels.forEach((_,idx)=>{
+                const p=sc.getPointPositionForValue(idx,0);
+                const a=Math.atan2(p.y-sc.yCenter,p.x-sc.xCenter);
+                let d=Math.abs(angle-a);if(d>Math.PI)d=2*Math.PI-d;
+                if(d<bestD){bestD=d;best=idx;}
+            });
+            if(best!==-1&&bestD<0.4){
+                const raw=Math.max(0,Math.min(4,(dist/sc.drawingArea)*4));
+                const val=Math.round(raw*2)/2; // snap to 0.5
+                const ri=idxMap[best];
+                if(vals[ri]===val)return;
+                vals[ri]=val;
+                inst.data.datasets[0].data[best]=val;
+                inst.update('none');
+                onUpdate(ri,val);
+            }
+        });
+        canvas.addEventListener('mouseup',()=>{dragging=false;canvas.style.cursor='grab';});
+        canvas.addEventListener('mouseleave',()=>{dragging=false;canvas.style.cursor='default';});
+    }
+
+    /* Delta fill plugin – colours only what's NEW beyond the baseline */
+    const deltaFillPlugin = {
+        id: 'deltaFill',
+        afterDatasetsDraw(chart) {
+            if (chart.data.datasets.length < 2) return;
+            const ctx   = chart.ctx;
+            const scale = chart.scales.r;
+            if (!scale) return;
+
+            const n        = chart.data.labels.length;
+            const baseline = chart.data.datasets[0].data;
+            const newVals  = chart.data.datasets[1].data;
+            const fill     = chart.data.datasets[1]._deltaFill || 'rgba(79,70,229,0.22)';
+
+            function pt(index, value) {
+                const angle = (2 * Math.PI / n * index) - Math.PI / 2;
+                const r = (value / (scale.max || 4)) * scale.drawingArea;
+                return { x: scale.xCenter + Math.cos(angle) * r,
+                         y: scale.yCenter + Math.sin(angle) * r };
+            }
+
+            const bPts = baseline.map((v, i) => pt(i, v));
+            const nPts = newVals.map((v, i) => pt(i, v));
+
+            // Draw on offscreen canvas to isolate compositing
+            const dpr = window.devicePixelRatio || 1;
+            const off  = document.createElement('canvas');
+            off.width  = chart.canvas.width;
+            off.height = chart.canvas.height;
+            const oCtx = off.getContext('2d');
+            oCtx.scale(dpr, dpr);
+
+            // Step 1: fill new polygon
+            oCtx.beginPath();
+            nPts.forEach((p, i) => i === 0 ? oCtx.moveTo(p.x, p.y) : oCtx.lineTo(p.x, p.y));
+            oCtx.closePath();
+            oCtx.fillStyle = fill;
+            oCtx.fill();
+
+            // Step 2: punch out baseline area → only the delta remains
+            oCtx.globalCompositeOperation = 'destination-out';
+            oCtx.beginPath();
+            bPts.forEach((p, i) => i === 0 ? oCtx.moveTo(p.x, p.y) : oCtx.lineTo(p.x, p.y));
+            oCtx.closePath();
+            oCtx.fillStyle = 'rgba(0,0,0,1)';
+            oCtx.fill();
+
+            // Step 3: draw delta onto main canvas (reset transform to match pixel coords)
+            const t = ctx.getTransform();
+            ctx.resetTransform();
+            ctx.drawImage(off, 0, 0);
+            ctx.setTransform(t);
+        }
+    };
+
+    /* Custom label plugin – "Standardfeld X" bold + name regular, matching PHTG layout */
+    const sfLabelPlugin = {
+        id: 'sfLabels',
+        afterDraw(chart) {
+            const ctx   = chart.ctx;
+            const scale = chart.scales.r;
+            if (!scale) return;
+
+            const count   = chart.data.labels.length;
+            const boldPx  = 11;
+            const regPx   = 10;
+            const lineH   = 14;
+            const pad     = 12; // gap beyond outer ring
+
+            chart.data.labels.forEach((fieldName, i) => {
+                const angle = (2 * Math.PI / count * i) - Math.PI / 2;
+                const cos   = Math.cos(angle);
+                const sin   = Math.sin(angle);
+
+                const r = scale.drawingArea + pad;
+                const x = scale.xCenter + cos * r;
+                const y = scale.yCenter + sin * r;
+
+                // Text alignment
+                let align = 'center';
+                if (cos > 0.18)  align = 'left';
+                else if (cos < -0.18) align = 'right';
+
+                // Wrap field name at ~95px width
+                ctx.font = `${regPx}px Arial, Helvetica, sans-serif`;
+                const maxW = 95;
+                const words = fieldName.split(' ');
+                const nameLines = [];
+                let ln = '';
+                words.forEach(w => {
+                    const test = ln ? ln + ' ' + w : w;
+                    if (ctx.measureText(test).width > maxW && ln) {
+                        nameLines.push(ln); ln = w;
+                    } else { ln = test; }
+                });
+                if (ln) nameLines.push(ln);
+
+                const totalH = lineH + nameLines.length * lineH;
+
+                // Vertical anchor: labels above centre go up, below go down, sides centre
+                let yStart;
+                if      (sin < -0.65) yStart = y - totalH;   // top
+                else if (sin >  0.65) yStart = y;             // bottom
+                else                  yStart = y - totalH / 2; // sides
+
+                ctx.save();
+                ctx.textAlign     = align;
+                ctx.textBaseline  = 'top';
+                ctx.fillStyle     = '#000000';
+
+                // Bold header
+                ctx.font = `bold ${boldPx}px Arial, Helvetica, sans-serif`;
+                ctx.fillText('Standardfeld ' + (i + 1), x, yStart);
+
+                // Regular name lines
+                ctx.font = `${regPx}px Arial, Helvetica, sans-serif`;
+                nameLines.forEach((line, li) => {
+                    ctx.fillText(line, x, yStart + lineH * (li + 1));
+                });
+
+                ctx.restore();
+            });
+        }
+    };
+
+    /* Radar options */
+    function radarOpts() {
+        return {
+            responsive: true,
+            maintainAspectRatio: true,
+            layout: { padding: { top: 90, bottom: 90, left: 110, right: 110 } },
+            scales: { r: {
+                beginAtZero: true, min: 0, max: 4,
+                ticks: { stepSize: 1, font: { size: 10 }, color: '#888', backdropColor: 'transparent' },
+                pointLabels: { display: false }, // drawn by sfLabelPlugin
+                grid:        { color: 'rgba(0,0,0,0.15)', lineWidth: 1 },
+                angleLines:  { color: 'rgba(0,0,0,0.15)', lineWidth: 1 }
+            }},
+            plugins: {
+                legend:  { display: false },
+                tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed.r.toFixed(1) } }
+            },
+            onHover: (e, els) => { e.native.target.style.cursor = els.length > 0 ? 'grab' : 'default'; }
+        };
+    }
+
+    /* Download */
+    function downloadPNG(inst,filename) {
+        setTimeout(()=>{
+            try{
+                const url=inst.canvas.toDataURL('image/png',1.0);
+                const a=document.createElement('a');a.download=filename;a.href=url;
+                document.body.appendChild(a);a.click();document.body.removeChild(a);
+            }catch(e){alert('Download fehlgeschlagen. Bitte versuche es erneut.');}
+        },50);
+    }
+
+    /* Compare */
+    function initNewValSliders(){
+        compValues=[...baselineValues];
+        initAdjustment('newValContainer','nv','updateNewVal',ALL10,compValues);
+    }
+
+    function buildCompare(){
+        buildSwatches('compareColorSwatches',compColor,color=>{
+            compColor=color;
+            const s=document.getElementById('newLegendSample');
+            if(s){s.style.borderColor=color;s.style.background=rgba(color,0.15);}
+            if(compChartInst){
+                compChartInst.data.datasets[1].borderColor=rgba(color,1);
+                compChartInst.data.datasets[1]._deltaFill=rgba(color,0.22);
+                compChartInst.update();
+            }
+        });
+        rebuildCompChart();
+        buildSummary();
+    }
+
+    function rebuildCompChart(){
+        const ctx=document.getElementById('compareChart');
+        if(compChartInst)compChartInst.destroy();
+        compChartInst=new Chart(ctx,{
+            type:'radar',
+            data:{labels:fields,datasets:[
+                {
+                    label:'Ausgangslage',data:[...baselineValues],
+                    backgroundColor:'rgba(156,163,175,0.18)',borderColor:'rgba(156,163,175,0.9)',
+                    borderWidth:2,
+                    pointRadius:0,pointHoverRadius:0,pointBorderWidth:0
+                },
+                {
+                    label:'Neue Einschätzung',data:[...compValues],
+                    backgroundColor:'transparent',          // plugin draws the delta fill
+                    borderColor:rgba(compColor,1),
+                    borderWidth:2,
+                    _deltaFill:rgba(compColor,0.22),        // used by deltaFillPlugin
+                    pointRadius:0,pointHoverRadius:0,pointBorderWidth:0
+                }
+            ]},
+            options:radarOpts(),
+            plugins:[sfLabelPlugin, deltaFillPlugin]
+        });
+        const s=document.getElementById('newLegendSample');
+        if(s){s.style.borderColor=compColor;s.style.background=rgba(compColor,0.15);}
+    }
+
+    function buildSummary(){
+        const improved=[],declined=[],unchanged=[];
+        fields.forEach((f,i)=>{
+            const d=parseFloat((compValues[i]-baselineValues[i]).toFixed(1));
+            if(d>0)improved.push({i,f,d});else if(d<0)declined.push({i,f,d});else unchanged.push({i,f});
+        });
+        const rows=(arr,type)=>arr.map(({i,f,d})=>`
+            <div class="summary-item"><span class="s-num">${i+1}</span><span>${f}</span>
+            ${d!==undefined?`<span class="delta-badge ${type}">${d>0?'+':''}${d}</span>`:''}</div>`).join('');
+        document.getElementById('compareSummaryContainer').innerHTML=`
+            <div class="compare-summary">
+                <div class="summary-card improved"><div class="summary-title">Verbesserungen (${improved.length})</div>${improved.length?rows(improved,'delta-pos'):'<span class="summary-empty">Keine</span>'}</div>
+                <div class="summary-card declined"><div class="summary-title">Rückgänge (${declined.length})</div>${declined.length?rows(declined,'delta-neg'):'<span class="summary-empty">Keine</span>'}</div>
+                <div class="summary-card unchanged"><div class="summary-title">Unverändert (${unchanged.length})</div>${unchanged.length?rows(unchanged,''):'<span class="summary-empty">Keine</span>'}</div>
+            </div>`;
+    }
+
+    /* Init */
+    initSFGrid();
+
+    document.getElementById('startBtn').addEventListener('click',()=>showSection('section2','mainStepNav'));
+    document.getElementById('sfNextBtn').addEventListener('click',()=>{
+        if(selectedFields.length===0){document.getElementById('sfError').style.display='block';return;}
+        document.getElementById('sfError').style.display='none';
+        showSection('section3','mainStepNav');initQuestions();
+    });
+    document.getElementById('completeBtn').addEventListener('click',completeQuestions);
+    document.getElementById('chartBtn').addEventListener('click',showChart);
+    document.getElementById('downloadBtn').addEventListener('click',()=>{if(chartInst)downloadPNG(chartInst,'reflexions-radar.png');});
+    document.getElementById('baselineNextBtn').addEventListener('click',()=>{showSection('csection2','compareStepNav');initNewValSliders();});
+    document.getElementById('compareChartBtn').addEventListener('click',()=>{showSection('csection3','compareStepNav');buildCompare();});
+    document.getElementById('compareDownloadBtn').addEventListener('click',()=>{if(compChartInst)downloadPNG(compChartInst,'reflexions-radar-vergleich.png');});
+});
+</script>
+</body>
+</html>
