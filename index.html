@@ -152,6 +152,57 @@
         .delta-pos{background:#D1FAE5;color:#065F46;}.delta-neg{background:#FEE2E2;color:#991B1B;}
         .summary-empty{font-size:.82em;color:var(--text-muted);font-style:italic;}
 
+        /* Import / Export */
+        .ie-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--bg);border-radius:8px;margin-bottom:14px;border:1px solid var(--border);}
+        .ie-bar-label{font-size:.76em;font-weight:700;color:var(--text-muted);margin-right:4px;}
+        .ie-btn{background:transparent;border:1.5px solid var(--border);color:var(--text-muted);padding:5px 12px;border-radius:6px;font-size:.78em;font-weight:700;cursor:pointer;font-family:Arial,Helvetica,sans-serif;transition:border-color .15s,color .15s;display:inline-flex;align-items:center;gap:5px;}
+        .ie-btn:hover{border-color:var(--accent);color:var(--accent);}
+        .ie-btn.success{border-color:#059669;color:#059669;}
+        .ie-paste-wrap{display:none;width:100%;margin-top:6px;}
+        .ie-paste-wrap.open{display:flex;gap:8px;align-items:flex-start;}
+        .ie-textarea{flex:1;font-family:Arial,Helvetica,sans-serif;font-size:.76em;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;resize:none;height:52px;background:var(--surface);color:var(--text);outline:none;}
+        .ie-textarea:focus{border-color:var(--accent);}
+        .ie-error{font-size:.75em;color:#DC2626;margin-top:4px;display:none;}
+
+        .ie-collapse-btn{width:100%;background:none;border:none;font-family:Arial,Helvetica,sans-serif;font-size:.88em;font-weight:700;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;gap:8px;padding:0;text-align:left;}
+        .ie-collapse-btn:hover{color:var(--accent);}
+        .ie-collapse-arrow{font-size:.8em;transition:transform .2s;display:inline-block;}
+        .ie-collapse-body{display:none;margin-top:12px;}
+        .ie-collapse-body.open{display:block;}
+
+        .delta-tag{margin-left:auto;font-size:.75em;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0;}
+        .delta-up{background:#D1FAE5;color:#065F46;}
+        .delta-down{background:#FEE2E2;color:#991B1B;}
+        .delta-eq{background:#F3F4F6;color:#6B7280;}
+        .prior-hint{font-size:.75em;color:var(--text-muted);margin-top:5px;padding-left:30px;}
+
+        .copy-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;align-items:center;justify-content:center;}
+        .copy-modal{background:var(--surface);border-radius:12px;padding:24px;max-width:480px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
+        .copy-modal h3{font-size:1em;font-weight:800;margin-bottom:8px;}
+        .copy-modal p{font-size:.85em;color:var(--text-muted);margin-bottom:12px;}
+        .copy-modal textarea{width:100%;height:72px;font-family:monospace;font-size:.78em;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;resize:none;color:var(--text);background:var(--bg);}
+        .copy-modal .hint{font-size:.76em;color:var(--text-muted);margin-top:6px;}
+        .copy-modal-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;}
+
+        /* Landing page */
+        .landing{max-width:860px;margin:0 auto;padding:48px 24px 80px;}
+        .landing-intro{text-align:center;margin-bottom:40px;}
+        .landing-intro h2{font-size:1.3em;font-weight:800;letter-spacing:-.02em;margin-bottom:10px;}
+        .landing-intro p{color:var(--text-muted);font-size:.97em;max-width:520px;margin:0 auto;}
+        .landing-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+        @media(max-width:600px){.landing-grid{grid-template-columns:1fr;}}
+        .landing-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px;transition:border-color .2s,box-shadow .2s;}
+        .landing-card:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(79,70,229,0.1);}
+        .landing-card-icon{width:44px;height:44px;border-radius:10px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:1.3em;}
+        .landing-card h3{font-size:1.05em;font-weight:800;letter-spacing:-.02em;}
+        .landing-card .desc{color:var(--text-muted);font-size:.88em;line-height:1.7;}
+        .landing-when{background:var(--bg);border-radius:8px;padding:12px 14px;}
+        .landing-when-title{font-size:.74em;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;}
+        .landing-when ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+        .landing-when ul li{font-size:.84em;color:var(--text);display:flex;align-items:flex-start;gap:7px;line-height:1.5;}
+        .landing-when ul li::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px;}
+        .landing-card .btn{margin-top:auto;align-self:flex-start;}
+
         .btn-row{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-top:32px;}
         .btn{background:var(--accent);color:white;border:none;padding:12px 30px;border-radius:8px;font-size:.88em;font-weight:700;cursor:pointer;font-family:Arial,Helvetica,sans-serif;transition:background .2s,transform .15s;}
         .btn:hover{background:var(--accent-dark);transform:translateY(-1px);}.btn:active{transform:translateY(0);}
@@ -172,10 +223,61 @@
     <p class="subtitle">Selbstbeurteilung der Reflexionstiefe über die 10 Standardfelder</p>
 </header>
 
+<!-- LANDING PAGE -->
+<div id="landingPage">
+    <div class="landing">
+        <div class="landing-intro">
+            <h2>Was möchtest du tun?</h2>
+            <p>Wähle eine der beiden Funktionen – du kannst jederzeit zwischen ihnen wechseln.</p>
+        </div>
+        <div class="landing-grid">
+
+            <!-- Karte 1: Neue Einschätzung -->
+            <div class="landing-card">
+                <div class="landing-card-icon">◎</div>
+                <h3>Neue Einschätzung</h3>
+                <p class="desc">Beurteile systematisch deine Reflexionstiefe in den 10 Standardfeldern. Du beantwortest einen Fragenkatalog, erhältst berechnete Mittelwerte und kannst das Ergebnis als Spider-Chart herunterladen.</p>
+                <div class="landing-when">
+                    <div class="landing-when-title">Wann nutze ich das?</div>
+                    <ul>
+                        <li>Zu Beginn oder am Ende einer Praxisphase</li>
+                        <li>Wenn du deinen aktuellen Reflexionsstand einschätzen willst</li>
+                        <li>Als Grundlage für ein späteres Vergleich</li>
+                        <li>Für die Disposition eines E-Portfoliobeitrags</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="showApp('main')">Einschätzung starten →</button>
+            </div>
+
+            <!-- Karte 2: Veränderungen darstellen -->
+            <div class="landing-card">
+                <div class="landing-card-icon">⟳</div>
+                <h3>Veränderungen darstellen</h3>
+                <p class="desc">Vergleiche zwei Einschätzungen miteinander und sieh auf einen Blick, in welchen Standardfeldern du dich weiterentwickelt hast. Der Spider-Chart zeigt farblich nur die neuen Bereiche.</p>
+                <div class="landing-when">
+                    <div class="landing-when-title">Wann nutze ich das?</div>
+                    <ul>
+                        <li>Nach einer Praxisphase, wenn du eine frühere Einschätzung gespeichert hast</li>
+                        <li>Wenn du Lernfortschritte sichtbar machen und dokumentieren möchtest</li>
+                        <li>Für Reflexionsgespräche mit Praxislehrpersonen oder Peers</li>
+                        <li>Für die Evaluation im E-Portfoliobeitrag</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="showApp('compare')">Vergleich starten →</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- APP (hidden until a CTA is clicked) -->
+<div id="appChrome" style="display:none;">
+
 <div class="mode-bar">
     <div class="mode-inner">
         <button class="mode-btn active" id="modeMainBtn" onclick="switchMode('main')">◎ Neue Einschätzung</button>
         <button class="mode-btn" id="modeCompareBtn" onclick="switchMode('compare')">⟳ Veränderungen darstellen</button>
+        <button class="mode-btn" onclick="showLanding()" style="margin-left:16px;font-size:.76em;color:var(--text-muted);">← Übersicht</button>
     </div>
 </div>
 
@@ -226,6 +328,25 @@
 
         <!-- S2: SF wählen -->
         <div id="section2" class="section">
+            <!-- Collapsible: import prior values -->
+            <div class="card" style="margin-bottom:16px;">
+                <button class="ie-collapse-btn" onclick="toggleImportCollapse()">
+                    <span class="ie-collapse-arrow" id="importArrow">▶</span>
+                    Vorherige Einschätzung als Vergleichswerte importieren (optional)
+                </button>
+                <div class="ie-collapse-body" id="importCollapse">
+                    <p style="font-size:.88em;color:var(--text-muted);margin-bottom:10px;">Füge einen gespeicherten Export-Text ein. Diese Werte dienen als Vorwerte – du machst danach den Fragenkatalog normal, und in Schritt 4 siehst du pro Standardfeld, ob du gestiegen oder gesunken bist.</p>
+                    <div class="ie-paste-wrap open" id="iebar-s2">
+                        <div style="flex:1">
+                            <textarea class="ie-textarea" placeholder='{"r":[2.5,1.5,…],"d":"…"} – gespeicherten Text hier einfügen'></textarea>
+                            <div class="ie-error">Format nicht erkannt. Bitte einen gültigen Export-Text einfügen.</div>
+                        </div>
+                        <button class="ie-btn" onclick="importAsPrior('iebar-s2')">Übernehmen</button>
+                    </div>
+                    <div id="importSuccess" style="display:none;font-size:.83em;color:#059669;font-weight:700;margin-top:8px;">✓ Vorwerte gespeichert – mache jetzt den Fragenkatalog normal weiter.</div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-title">Für welche Standardfelder möchtest du den Fragenkatalog ausfüllen?</div>
                 <p>Wähle die Standardfelder aus, zu denen du konkrete Portfolio-Einträge hast. Im nächsten Schritt kannst du <strong>alle 10 Standardfelder</strong> manuell anpassen – der Spider-Chart zeigt immer alle 10.</p>
@@ -254,7 +375,22 @@
 
         <!-- S4: Anpassung (immer alle 10 SF) -->
         <div id="section4" class="section">
-            <div class="info-banner"><p><strong>Alle 10 Standardfelder:</strong> Die Werte der bewerteten Felder wurden aus dem Fragenkatalog berechnet. Passe alle Werte nach deiner persönlichen Einschätzung an.</p></div>
+            <div class="info-banner" id="s4Banner"><p><strong>Alle 10 Standardfelder:</strong> Die Werte der bewerteten Felder wurden aus dem Fragenkatalog berechnet. Passe alle Werte nach deiner persönlichen Einschätzung an.</p></div>
+
+            <!-- Import/Export -->
+            <div class="ie-bar">
+                <span class="ie-bar-label">Werte:</span>
+                <button class="ie-btn" onclick="exportVals('fieldValues', this)">⬆ Exportieren</button>
+                <button class="ie-btn" onclick="togglePaste('iebar-s4')">⬇ Importieren</button>
+                <div class="ie-paste-wrap" id="iebar-s4" style="width:100%;margin-top:6px;">
+                    <div style="flex:1">
+                        <textarea class="ie-textarea" placeholder="Gespeicherten Text hier einfügen…"></textarea>
+                        <div class="ie-error">Format nicht erkannt. Bitte einen gültigen Export-Text einfügen.</div>
+                    </div>
+                    <button class="ie-btn" onclick="applyImport('iebar-s4', 'fieldValues', 'fadj')">Laden</button>
+                </div>
+            </div>
+
             <div class="adj-grid" id="adjustmentContainer"></div>
             <div class="btn-row">
                 <button class="btn-outline" onclick="showSection('section3','mainStepNav')">← Zurück</button>
@@ -265,6 +401,13 @@
         <!-- S5: Visualisierung -->
         <div id="section5" class="section">
             <div class="info-banner"><p><strong>Interaktiv:</strong> Ziehe die Datenpunkte direkt im Diagramm, um deine Reflexionsstufen anzupassen. Die Schieberegler unten aktualisieren sich automatisch.</p></div>
+
+            <!-- Export bar -->
+            <div class="ie-bar">
+                <span class="ie-bar-label">Werte sichern:</span>
+                <button class="ie-btn" onclick="exportVals('fieldValues', this)">⬆ Exportieren</button>
+                <span style="font-size:.75em;color:var(--text-muted)">Kopiert den aktuellen Stand – einfügen in Notiz-App</span>
+            </div>
             <div class="chart-card">
                 <div class="chart-inner"><canvas id="radarChart"></canvas></div>
                 <div class="chart-legend-row">
@@ -277,6 +420,15 @@
                 </div>
             </div>
             <div class="adj-grid" id="finalAdjustmentContainer"></div>
+
+            <div class="card" style="margin-top:20px;background:var(--accent-light);border-color:var(--accent);">
+                <div class="card-title" style="color:var(--accent-dark);">Veränderungen zu einem späteren Zeitpunkt aufzeigen</div>
+                <p style="color:var(--accent-dark);">Speichere diese Einschätzung als Ausgangslage. Wenn du nach einer weiteren Praxisphase zurückkommst, kannst du deine neuen Werte eintragen und sehen, was sich verändert hat.</p>
+                <div class="btn-row" style="margin-top:4px;justify-content:flex-start;">
+                    <button class="btn" id="useAsBaselineBtn">Diese Einschätzung als Ausgangslage verwenden →</button>
+                </div>
+            </div>
+
             <div class="btn-row">
                 <button class="btn-outline" onclick="showSection('section4','mainStepNav')">← Zurück</button>
                 <button class="btn" id="downloadBtn">Diagramm herunterladen</button>
@@ -304,12 +456,34 @@
                 <p>Noch keine frühere Einschätzung? Setze alle Werte auf 0.</p>
             </div>
             <div class="adj-grid" id="baselineContainer"></div>
+            <div class="ie-bar" style="margin-top:12px;">
+                <span class="ie-bar-label">Gespeicherte Werte laden:</span>
+                <button class="ie-btn" onclick="togglePaste('iebar-c1')">⬇ Importieren</button>
+                <div class="ie-paste-wrap" id="iebar-c1" style="width:100%;margin-top:6px;">
+                    <div style="flex:1">
+                        <textarea class="ie-textarea" placeholder="Gespeicherten Text hier einfügen…"></textarea>
+                        <div class="ie-error">Format nicht erkannt. Bitte einen gültigen Export-Text einfügen.</div>
+                    </div>
+                    <button class="ie-btn" onclick="applyImport('iebar-c1', 'baselineValues', 'bl')">Laden</button>
+                </div>
+            </div>
             <div class="btn-row"><button class="btn" id="baselineNextBtn">Weiter →</button></div>
         </div>
 
         <div id="csection2" class="section">
-            <div class="info-banner"><p><strong>Neue Einschätzung:</strong> Trage deine aktuellen Reflexionsstufen ein. Die Werte sind mit der Ausgangslage vorausgefüllt – passe sie an.</p></div>
+            <div class="info-banner" id="csection2Banner"><p><strong>Neue Einschätzung:</strong> Trage deine aktuellen Reflexionsstufen ein. Die Werte sind mit der Ausgangslage vorausgefüllt – passe sie an.</p></div>
             <div class="adj-grid" id="newValContainer"></div>
+            <div class="ie-bar" style="margin-top:12px;">
+                <span class="ie-bar-label">Gespeicherte Werte laden:</span>
+                <button class="ie-btn" onclick="togglePaste('iebar-c2')">⬇ Importieren</button>
+                <div class="ie-paste-wrap" id="iebar-c2" style="width:100%;margin-top:6px;">
+                    <div style="flex:1">
+                        <textarea class="ie-textarea" placeholder="Gespeicherten Text hier einfügen…"></textarea>
+                        <div class="ie-error">Format nicht erkannt. Bitte einen gültigen Export-Text einfügen.</div>
+                    </div>
+                    <button class="ie-btn" onclick="applyImport('iebar-c2', 'compValues', 'nv')">Laden</button>
+                </div>
+            </div>
             <div class="btn-row">
                 <button class="btn-outline" onclick="showSection('csection1','compareStepNav')">← Zurück</button>
                 <button class="btn" id="compareChartBtn">Vergleich anzeigen →</button>
@@ -320,13 +494,13 @@
             <div class="chart-card">
                 <div class="chart-inner"><canvas id="compareChart"></canvas></div>
                 <div class="chart-legend-row">
-                    <span class="legend-sample" style="border-color:#9CA3AF;background:rgba(156,163,175,0.12)"></span>
+                    <span class="legend-sample" id="baselineLegendSample" style="border-color:rgba(79,70,229,0.5);background:rgba(79,70,229,0.12)"></span>
                     <span class="legend-label-txt">Ausgangslage</span>
-                    <span class="legend-sample" id="newLegendSample" style="border-color:#4F46E5;background:rgba(79,70,229,0.15)"></span>
-                    <span class="legend-label-txt">Neue Einschätzung</span>
+                    <span class="legend-sample" id="newLegendSample" style="border-color:#4F46E5;background:rgba(79,70,229,0.25)"></span>
+                    <span class="legend-label-txt">Neue Einschätzung (Zuwachs)</span>
                 </div>
                 <div class="color-picker-row">
-                    <label>Farbe (Neue Einschätzung):</label>
+                    <label>Farbe:</label>
                     <div class="color-swatches" id="compareColorSwatches"></div>
                 </div>
             </div>
@@ -380,14 +554,28 @@ document.addEventListener('DOMContentLoaded', function () {
     const ALL10 = Array.from({length:10},(_,i)=>i);
 
     /* State */
-    let selectedFields = [...ALL10];   // SF for questionnaire only
-    let fieldValues    = new Array(10).fill(2);   // always 10 values for chart
+    let selectedFields = [...ALL10];
+    let fieldValues    = new Array(10).fill(2);
     let baselineValues = new Array(10).fill(0);
     let compValues     = new Array(10).fill(0);
+    let priorValues    = null;   // imported before questionnaire, for delta display in step 4
     let chartColor     = '#4F46E5';
     let compColor      = '#4F46E5';
     let chartInst      = null;
     let compChartInst  = null;
+
+    /* ── Landing navigation ─────────────── */
+    window.showApp = function(mode) {
+        document.getElementById('landingPage').style.display  = 'none';
+        document.getElementById('appChrome').style.display    = 'block';
+        switchMode(mode);
+        window.scrollTo(0,0);
+    };
+    window.showLanding = function() {
+        document.getElementById('appChrome').style.display   = 'none';
+        document.getElementById('landingPage').style.display = 'block';
+        window.scrollTo(0,0);
+    };
 
     /* Mode switch */
     window.switchMode = function(mode) {
@@ -478,13 +666,33 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* Adjustment – step 0.5 */
-    function initAdjustment(cId,prefix,fnName,indices,values) {
+    function initAdjustment(cId, prefix, fnName, indices, values, showDelta=false) {
         const c=document.getElementById(cId);c.innerHTML='';
         indices.forEach(i=>{
             const id=`${prefix}${i}`;
             const d=document.createElement('div');d.className='adj-item';
+
+            // Delta vs priorValues (only for main adjustment step 4)
+            let deltaHtml='', priorHtml='';
+            if(showDelta && priorValues){
+                const delta=parseFloat((values[i]-priorValues[i]).toFixed(1));
+                if(delta>0){
+                    deltaHtml=`<span class="delta-tag delta-up">↑ +${delta}</span>`;
+                } else if(delta<0){
+                    deltaHtml=`<span class="delta-tag delta-down">↓ ${delta}</span>`;
+                } else {
+                    deltaHtml=`<span class="delta-tag delta-eq">= gleich</span>`;
+                }
+                priorHtml=`<div class="prior-hint">Vorwert: ${priorValues[i].toFixed(1)}</div>`;
+            }
+
             d.innerHTML=`
-                <div class="adj-label"><span class="field-num">${i+1}</span><span>${fields[i]}</span></div>
+                <div class="adj-label">
+                    <span class="field-num">${i+1}</span>
+                    <span>${fields[i]}</span>
+                    ${deltaHtml}
+                </div>
+                ${priorHtml}
                 <div class="slider-row">
                     <span class="range-num">0</span>
                     <input type="range" id="${id}" min="0" max="4" step="0.5" value="${values[i]}"
@@ -524,6 +732,165 @@ document.addEventListener('DOMContentLoaded', function () {
         const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
         return `rgba(${r},${g},${b},${a})`;
     }
+
+    /* ── Import / Export ───────────────── */
+    function parseImportStr(str) {
+        str = str.trim();
+        let parsed = null;
+        try {
+            const obj = JSON.parse(str);
+            if (obj.r && Array.isArray(obj.r) && obj.r.length === 10)
+                parsed = obj.r.map(v => Math.min(4, Math.max(0, Math.round(parseFloat(v)*2)/2)));
+        } catch(e) {}
+        if (!parsed) {
+            const nums = str.split(/[,|\s]+/).map(Number).filter(n => !isNaN(n) && n>=0 && n<=4);
+            if (nums.length === 10) parsed = nums.map(v => Math.round(v*2)/2);
+        }
+        return parsed;
+    }
+
+    window.toggleImportCollapse = function() {
+        const body  = document.getElementById('importCollapse');
+        const arrow = document.getElementById('importArrow');
+        const open  = body.classList.toggle('open');
+        arrow.textContent = open ? '▼' : '▶';
+    };
+
+    window.importAsPrior = function(wrapId) {
+        const w   = document.getElementById(wrapId);
+        const ta  = w.querySelector('textarea');
+        const err = w.querySelector('.ie-error');
+        const parsed = parseImportStr(ta.value);
+        if (!parsed) { err.style.display='block'; return; }
+        err.style.display = 'none';
+        priorValues = parsed;
+        ta.value = '';
+        // Show success, close collapse
+        document.getElementById('importSuccess').style.display = 'block';
+        const body  = document.getElementById('importCollapse');
+        const arrow = document.getElementById('importArrow');
+        body.classList.remove('open');
+        arrow.textContent = '▶';
+    };
+
+    window.importAndSkip = function(wrapId) {
+        const w   = document.getElementById(wrapId);
+        const ta  = w.querySelector('textarea');
+        const err = w.querySelector('.ie-error');
+
+        const str = ta.value.trim();
+        let parsed = null;
+        try {
+            const obj = JSON.parse(str);
+            if (obj.r && Array.isArray(obj.r) && obj.r.length === 10)
+                parsed = obj.r.map(v => Math.min(4, Math.max(0, Math.round(parseFloat(v)*2)/2)));
+        } catch(e) {}
+        if (!parsed) {
+            const nums = str.split(/[,|\s]+/).map(Number).filter(n => !isNaN(n) && n>=0 && n<=4);
+            if (nums.length === 10) parsed = nums.map(v => Math.round(v*2)/2);
+        }
+        if (!parsed) { err.style.display='block'; return; }
+        err.style.display = 'none';
+
+        // Apply to fieldValues
+        ALL10.forEach(i => { fieldValues[i] = parsed[i]; });
+
+        // Jump directly to step 4 (skip questionnaire)
+        showSection('section4','mainStepNav');
+        initAdjustment('adjustmentContainer','adj','updateAdjustment',ALL10,fieldValues,true);
+        // Update banner if prior values were imported
+        const banner = document.querySelector('#s4Banner p');
+        if(banner && priorValues){
+            banner.innerHTML='<strong>Vergleich mit Vorwerten:</strong> Die farbigen Badges zeigen, ob du in einem Standardfeld gestiegen ↑ oder gesunken ↓ bist im Vergleich zu deiner importierten Einschätzung.';
+        }
+    };
+
+    window.exportVals = function(valuesKey, btnEl) {
+        const values = valuesKey === 'fieldValues' ? fieldValues
+                     : valuesKey === 'baselineValues' ? baselineValues : compValues;
+        const d = new Date();
+        const datum = d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
+        const str = JSON.stringify({r: values.map(v => parseFloat(parseFloat(v).toFixed(1))), d: datum});
+
+        // Try silent copy first
+        let copied = false;
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = str;
+            ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;';
+            document.body.appendChild(ta);
+            ta.focus(); ta.select();
+            copied = document.execCommand('copy');
+            document.body.removeChild(ta);
+        } catch(e) { copied = false; }
+
+        if (copied) {
+            const orig = btnEl.innerHTML;
+            btnEl.textContent = '✓ Kopiert!';
+            btnEl.classList.add('success');
+            setTimeout(() => { btnEl.innerHTML = orig; btnEl.classList.remove('success'); }, 2500);
+        } else {
+            // Always works: show modal for manual copy
+            const overlay = document.getElementById('copyFallbackOverlay');
+            const ftxt    = document.getElementById('copyFallbackText');
+            ftxt.value = str;
+            overlay.style.display = 'flex';
+            setTimeout(() => { ftxt.focus(); ftxt.select(); }, 50);
+        }
+    };
+
+    window.closeCopyFallback = function() {
+        document.getElementById('copyFallbackOverlay').style.display = 'none';
+    };
+
+    window.tryCopyFromModal = function() {
+        const ta = document.getElementById('copyFallbackText');
+        ta.select();
+        try { document.execCommand('copy'); } catch(e) {}
+    };
+
+    window.togglePaste = function(wrapId) {
+        const w = document.getElementById(wrapId);
+        w.classList.toggle('open');
+        if (w.classList.contains('open')) w.querySelector('textarea').focus();
+    };
+
+    window.applyImport = function(wrapId, valuesKey, prefix) {
+        const values = valuesKey === 'fieldValues' ? fieldValues
+                     : valuesKey === 'baselineValues' ? baselineValues : compValues;
+        const w   = document.getElementById(wrapId);
+        const ta  = w.querySelector('textarea');
+        const err = w.querySelector('.ie-error');
+
+        const str = ta.value.trim();
+        let parsed = null;
+        try {
+            const obj = JSON.parse(str);
+            if (obj.r && Array.isArray(obj.r) && obj.r.length === 10)
+                parsed = obj.r.map(v => Math.min(4, Math.max(0, Math.round(parseFloat(v)*2)/2)));
+        } catch(e) {}
+        if (!parsed) {
+            const nums = str.split(/[,|\s]+/).map(Number).filter(n => !isNaN(n) && n>=0 && n<=4);
+            if (nums.length === 10) parsed = nums.map(v => Math.round(v*2)/2);
+        }
+        if (!parsed) { err.style.display='block'; return; }
+        err.style.display = 'none';
+
+        ALL10.forEach(i => {
+            values[i] = parsed[i];
+            const sl = document.getElementById(prefix+i);
+            const pill = document.getElementById(prefix+i+'_val');
+            if (sl)   sl.value = parsed[i];
+            if (pill) pill.textContent = parsed[i].toFixed(1);
+        });
+        ta.value = '';
+        w.classList.remove('open');
+
+        // Sync live chart if open
+        if (prefix==='fadj' && chartInst) {
+            chartInst.data.datasets[0].data = [...fieldValues]; chartInst.update();
+        }
+    };
 
     /* Main chart – always 10 SF */
     function showChart() {
@@ -768,16 +1135,24 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildCompare(){
         buildSwatches('compareColorSwatches',compColor,color=>{
             compColor=color;
-            const s=document.getElementById('newLegendSample');
-            if(s){s.style.borderColor=color;s.style.background=rgba(color,0.15);}
+            updateCompLegendSamples();
             if(compChartInst){
+                compChartInst.data.datasets[0].borderColor=rgba(color,0.5);
+                compChartInst.data.datasets[0].backgroundColor=rgba(color,0.12);
                 compChartInst.data.datasets[1].borderColor=rgba(color,1);
-                compChartInst.data.datasets[1]._deltaFill=rgba(color,0.22);
+                compChartInst.data.datasets[1]._deltaFill=rgba(color,0.28);
                 compChartInst.update();
             }
         });
         rebuildCompChart();
         buildSummary();
+    }
+
+    function updateCompLegendSamples(){
+        const bl=document.getElementById('baselineLegendSample');
+        const nw=document.getElementById('newLegendSample');
+        if(bl){bl.style.borderColor=rgba(compColor,0.5);bl.style.background=rgba(compColor,0.12);}
+        if(nw){nw.style.borderColor=rgba(compColor,1);nw.style.background=rgba(compColor,0.28);}
     }
 
     function rebuildCompChart(){
@@ -787,25 +1162,27 @@ document.addEventListener('DOMContentLoaded', function () {
             type:'radar',
             data:{labels:fields,datasets:[
                 {
+                    // Ausgangslage: helle Version der gewählten Farbe
                     label:'Ausgangslage',data:[...baselineValues],
-                    backgroundColor:'rgba(156,163,175,0.18)',borderColor:'rgba(156,163,175,0.9)',
+                    backgroundColor:rgba(compColor,0.12),
+                    borderColor:rgba(compColor,0.5),
                     borderWidth:2,
                     pointRadius:0,pointHoverRadius:0,pointBorderWidth:0
                 },
                 {
+                    // Neue Einschätzung: satte Version, nur Delta-Fläche (Plugin)
                     label:'Neue Einschätzung',data:[...compValues],
-                    backgroundColor:'transparent',          // plugin draws the delta fill
+                    backgroundColor:'transparent',
                     borderColor:rgba(compColor,1),
                     borderWidth:2,
-                    _deltaFill:rgba(compColor,0.22),        // used by deltaFillPlugin
+                    _deltaFill:rgba(compColor,0.28),
                     pointRadius:0,pointHoverRadius:0,pointBorderWidth:0
                 }
             ]},
             options:radarOpts(),
-            plugins:[sfLabelPlugin, deltaFillPlugin]
+            plugins:[sfLabelPlugin,deltaFillPlugin]
         });
-        const s=document.getElementById('newLegendSample');
-        if(s){s.style.borderColor=compColor;s.style.background=rgba(compColor,0.15);}
+        updateCompLegendSamples();
     }
 
     function buildSummary(){
@@ -828,7 +1205,12 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Init */
     initSFGrid();
 
-    document.getElementById('startBtn').addEventListener('click',()=>showSection('section2','mainStepNav'));
+    document.getElementById('startBtn').addEventListener('click',()=>{
+        priorValues = null;
+        const succ = document.getElementById('importSuccess');
+        if(succ) succ.style.display='none';
+        showSection('section2','mainStepNav');
+    });
     document.getElementById('sfNextBtn').addEventListener('click',()=>{
         if(selectedFields.length===0){document.getElementById('sfError').style.display='block';return;}
         document.getElementById('sfError').style.display='none';
@@ -840,7 +1222,39 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('baselineNextBtn').addEventListener('click',()=>{showSection('csection2','compareStepNav');initNewValSliders();});
     document.getElementById('compareChartBtn').addEventListener('click',()=>{showSection('csection3','compareStepNav');buildCompare();});
     document.getElementById('compareDownloadBtn').addEventListener('click',()=>{if(compChartInst)downloadPNG(compChartInst,'reflexions-radar-vergleich.png');});
+
+    document.getElementById('useAsBaselineBtn').addEventListener('click',()=>{
+        // Copy current assessment as baseline, pre-fill new values too
+        baselineValues=[...fieldValues];
+        compValues=[...fieldValues];
+        // Switch to compare mode and open at step 2 directly
+        switchMode('compare');
+        // Override step 1 init (already done in switchMode) so sliders show assessment values
+        initAdjustment('baselineContainer','bl','updateBaseline',ALL10,baselineValues);
+        // Update step 2 banner to explain context
+        const banner=document.querySelector('#csection2Banner p');
+        if(banner) banner.innerHTML='<strong>Neue Einschätzung:</strong> Die Ausgangslage wurde aus deiner Selbsteinschätzung übernommen. Passe die Werte an, wenn du Veränderungen feststellst.';
+        // Go directly to step 2
+        showSection('csection2','compareStepNav');
+        initAdjustment('newValContainer','nv','updateNewVal',ALL10,compValues);
+    });
 });
 </script>
+</div><!-- /appChrome -->
+
+<!-- Copy fallback overlay -->
+<div class="copy-overlay" id="copyFallbackOverlay" onclick="if(event.target===this)closeCopyFallback()">
+    <div class="copy-modal">
+        <h3>Werte exportieren</h3>
+        <p>Text unten markieren und kopieren – dann in deine Notiz-App einfügen:</p>
+        <textarea id="copyFallbackText" readonly onclick="this.select()"></textarea>
+        <div class="hint">Alles markieren: <strong>Ctrl+A</strong> (Windows) oder <strong>Cmd+A</strong> (Mac), dann <strong>Ctrl+C / Cmd+C</strong></div>
+        <div class="copy-modal-btns">
+            <button class="btn" onclick="tryCopyFromModal()">Kopieren</button>
+            <button class="btn-outline" onclick="closeCopyFallback()">Schliessen</button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
