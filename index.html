@@ -404,6 +404,20 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // PHTG Farben – überschreiben alle CSS-Deklarationen
+    const root = document.documentElement;
+    root.style.setProperty('--accent',       '#0b1b53');
+    root.style.setProperty('--accent-light', '#e8ecf7');
+    root.style.setProperty('--accent-dark',  '#071036');
+    root.style.setProperty('--accent-deep',  '#071036');
+    root.style.setProperty('--l1-bg',        '#c5ccdf');
+    root.style.setProperty('--l1-text',      '#0b1b53');
+    root.style.setProperty('--l2-bg',        '#6b7faa');
+    root.style.setProperty('--l2-text',      '#FFFFFF');
+    root.style.setProperty('--l3-bg',        '#0b1b53');
+    root.style.setProperty('--l3-text',      '#FFFFFF');
+    root.style.setProperty('--l4-bg',        '#071036');
+    root.style.setProperty('--l4-text',      '#FFFFFF');
 
     const fields = [
         "Fachwissen und -können","Lernen und Entwickeln","Umgang mit Heterogenität",
