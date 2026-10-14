@@ -9,7 +9,7 @@ Studiengang Primarstufe · Pädagogische Hochschule Thurgau (PHTG)
 
 Das Reflexions-Radar ist ein browserbasiertes Self-Assessment-Tool für Studierende im Studiengang Primarstufe. Es unterstützt die systematische Einschätzung der eigenen Reflexionstiefe in den 10 Standardfeldern der Primarschulausbildung – direkt auf Basis der E-Portfolio-Einträge.
 
-Das Tool visualisiert die Selbsteinschätzung als interaktives Spider-Chart und orientiert sich im Export bewusst am Layout des offiziellen PHTG-Dokuments (vgl. PHTG, 2024, S. 40), sodass das Ergebnis nahtlos in das E-Portfolio integriert werden kann.
+Das Tool visualisiert die Selbsteinschätzung als interaktiven Spider-Chart oder als Kuchenstücke-Diagramm und orientiert sich im Export am Layout des offiziellen PHTG-Dokuments (vgl. PHTG, 2024, S. 40), sodass das Ergebnis nahtlos in das E-Portfolio integriert werden kann.
 
 ---
 
@@ -18,27 +18,29 @@ Das Tool visualisiert die Selbsteinschätzung als interaktives Spider-Chart und 
 ### Neue Einschätzung (5-Schritte-Flow)
 
 1. **Einführung** – Erklärung der 5 Reflexionsstufen mit konkreten Anwendungsbeispielen
-2. **Standardfelder wählen** – Auswahl, zu welchen SF der Fragenkatalog ausgefüllt wird (der Spider zeigt immer alle 10 SF)
+2. **Standardfelder wählen** – Auswahl, zu welchen SF der Fragenkatalog ausgefüllt wird (der Chart zeigt immer alle 10 SF)
 3. **Fragenkatalog** – Je 5 Aussagen pro gewähltem Standardfeld; Bewertung auf einer Skala von 0–4 (Schritte: 0.5)
 4. **Anpassung** – Alle 10 Standardfelder als Schieberegler; berechnete Mittelwerte können manuell überschrieben werden
-5. **Visualisierung** – Interaktiver Spider-Chart:
-   - Datenpunkte per Drag-and-Drop anpassen
-   - Farbauswahl (7 Farben: Indigo + alle PHTG-Farben)
-   - Download als PNG im PHTG-Layoutstil
+5. **Visualisierung** – Interaktiver Chart mit zwei Ansichten:
+   - **Spider-Chart:** Datenpunkte per Drag-and-Drop anpassen
+   - **Kuchenstücke:** 10 Sektoren mit sichtbaren Ring-Abstufungen (Stufe 1–4)
+   - Farbauswahl aus der PHTG-Farbpalette (7 Farben + Weiss + Schwarz)
+   - Frühere Einschätzung als Vergleichsebene laden (JSON-Import)
+   - Einschätzung speichern (JSON-Export)
+   - Download als PNG
 
 ### Veränderungen darstellen (Vergleichsmodus)
 
 Ein separater, unabhängiger Modus zum Vergleich zweier Einschätzungszeitpunkte:
 
-- **Ausgangslage** – Werte des ersten Messzeitpunkts (alle 10 SF per Slider)
-- **Neue Einschätzung** – Aktuelle Werte (alle 10 SF per Slider, vorausgefüllt mit Ausgangslage)
+- **Ausgangslage** – Werte des ersten Messzeitpunkts; manuell eingeben oder aus JSON laden
+- **Neue Einschätzung** – Aktuelle Werte (vorausgefüllt mit Ausgangslage); als JSON speicherbar
 - **Vergleichs-Chart** – Zweilagen-Spider:
   - Grau = Ausgangslage
-  - Farbe = **ausschliesslich die Bereiche, die neu dazugekommen sind** (kein Overlap mit der Ausgangslage)
+  - Farbe = ausschliesslich die Bereiche, die neu dazugekommen sind
   - Die farbige Outline zeigt den vollständigen aktuellen Umriss
 - **Zusammenfassung** – Tabellarische Übersicht: Verbesserungen, Rückgänge, unverändert (mit Deltawert)
-- Farbwahl auch im Vergleichsmodus
-- Download als PNG
+- Vergleich als JSON oder PNG exportieren
 
 ---
 
@@ -85,15 +87,15 @@ Das Tool ist eine **einzelne HTML-Datei** (`index.html`) ohne Build-Prozess, ohn
 
 - **Vanilla JavaScript** (kein Framework)
 - **Custom Chart.js Plugins:**
-  - `sfLabelPlugin` – Zeichnet die Achsenbeschriftungen direkt auf den Canvas mit gemischter Schriftstärke (fett: „Standardfeld X", regular: Bezeichnung) – exakt im PHTG-Layoutstil
+  - `sfLabelPlugin` – Zeichnet die Achsenbeschriftungen direkt auf den Canvas mit gemischter Schriftstärke (fett: «Standardfeld X», regular: Bezeichnung) – im PHTG-Layoutstil
   - `deltaFillPlugin` – Berechnet per Offscreen-Canvas und `destination-out`-Compositing die Differenzfläche zwischen Ausgangslage und neuer Einschätzung; nur der echte Zuwachs wird eingefärbt
+- **Kuchenstücke-Ansicht:** Eigene Canvas-Implementierung mit 10 Sektoren und sichtbaren Ring-Abstufungen pro Stufe
+- **Import/Export:** JSON-basiert für alle Einschätzungen und Vergleiche
 - **Schieberegler:** Schrittgrösse 0.5 (Werte: 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4)
 - **Drag-Interaktion** auf dem Spider-Chart (Achsenwinkel-basiert, snapped auf 0.5)
 - **PNG-Export** via `canvas.toDataURL()`
 
 ### Lokale Nutzung
-
-Die Datei kann direkt im Browser geöffnet werden – es ist kein Webserver nötig:
 
 ```bash
 open index.html
@@ -101,32 +103,20 @@ open index.html
 
 ---
 
-## Deployment mit Vercel
+## Deployment mit Vercel oder GitHub Pages
 
-Das Tool lässt sich mit wenigen Schritten auf Vercel deployen:
+### GitHub Pages (empfohlen)
 
-### Variante A: Über das Vercel Dashboard (empfohlen)
+1. `index.html` in ein GitHub-Repository pushen
+2. Repository → Settings → Pages
+3. Source: «Deploy from a branch» → `main` → `/ (root)`
+4. Die Seite ist unter `https://<username>.github.io/<repo>/` erreichbar
+
+### Vercel
 
 1. Repository auf GitHub erstellen und `index.html` pushen
-2. Auf [vercel.com](https://vercel.com) einloggen
-3. „Add New Project" → GitHub-Repo auswählen
-4. Framework Preset: **Other**
-5. Deploy – fertig
-
-Vercel erkennt `index.html` im Root automatisch als Einstiegspunkt.
-
-### Variante B: Vercel CLI
-
-```bash
-npm i -g vercel
-vercel
-```
-
-### Variante C: GitHub Pages
-
-1. Repository-Settings → Pages
-2. Source: „Deploy from a branch" → `main` → `/ (root)`
-3. Die Seite ist unter `https://<username>.github.io/<repo>/` erreichbar
+2. Auf [vercel.com](https://vercel.com) einloggen → «Add New Project» → Repo auswählen
+3. Framework Preset: **Other** → Deploy
 
 ---
 
@@ -143,9 +133,10 @@ reflexions-radar/
 
 ## Entstehung und Kontext
 
-Dieses Tool entstand als Experiment im Rahmen der Arbeit in der **Fachstelle Schule und Digitalität** an der Pädagogischen Hochschule Thurgau.
+Dieses Tool wurde im Rahmen der Arbeit in der **Fachstelle Schule und Digitalität** an der Pädagogischen Hochschule Thurgau entwickelt.
 
-**Entwickelt mit:** Claude (Anthropic) – Code Claude / Claude Sonnet  
+**Erstellt im:** Frühlingssemester 2026; letzter Stand Oktober 2026  
+**Entwickelt mit:** Claude (Anthropic)  
 **Autorin:** Sabrina Meier, PHTG  
 **Fachlicher Hintergrund:** Die Standardfelder und Reflexionsstufen orientieren sich an der PHTG-Publikation zur Selbsteinschätzung im E-Portfolio (Pädagogische Hochschule Thurgau, 2024).
 
