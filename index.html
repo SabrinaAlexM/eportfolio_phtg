@@ -419,6 +419,11 @@ document.addEventListener('DOMContentLoaded', function () {
     root.style.setProperty('--l4-bg',        '#071036');
     root.style.setProperty('--l4-text',      '#FFFFFF');
 
+    // Favicon auf PHTG Dunkelblau aktualisieren
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="5" fill="#0b1b53"/><polygon points="16,3 28,12 24,27 8,27 4,12" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/><polygon points="16,9.5 22.2,14 19.8,21.3 12.2,21.3 9.8,14" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="0.7"/><line x1="16" y1="16" x2="16" y2="3" stroke="rgba(255,255,255,0.2)" stroke-width="0.7"/><line x1="16" y1="16" x2="28" y2="12" stroke="rgba(255,255,255,0.2)" stroke-width="0.7"/><line x1="16" y1="16" x2="24" y2="27" stroke="rgba(255,255,255,0.2)" stroke-width="0.7"/><line x1="16" y1="16" x2="8" y2="27" stroke="rgba(255,255,255,0.2)" stroke-width="0.7"/><line x1="16" y1="16" x2="4" y2="12" stroke="rgba(255,255,255,0.2)" stroke-width="0.7"/><polygon points="16,7.5 24.1,13.4 21,22.9 11,22.9 7.9,13.4" fill="rgba(255,255,255,0.22)" stroke="white" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    const favicon = document.querySelector('link[rel="icon"]');
+    if (favicon) favicon.href = 'data:image/svg+xml;base64,' + btoa(svg);
+
     const fields = [
         "Fachwissen und -können","Lernen und Entwickeln","Umgang mit Heterogenität",
         "Eigenständiges Lernen, kritisches Denken, Problemlösen","Soziales Umfeld","Kommunikation",
