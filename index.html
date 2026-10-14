@@ -292,6 +292,11 @@
         <div id="section5" class="section">
             <div class="info-banner"><p><strong>Interaktiv:</strong> Wähle die Ansicht (Spider oder Kuchenstücke) und passe die Farbe an. Im Spider kannst du Punkte ziehen – die Schieberegler aktualisieren sich automatisch.</p></div>
 
+            <div class="card" style="padding:18px 24px;">
+                <label for="portfolioName" style="font-size:.82em;font-weight:700;color:var(--text-muted);display:block;margin-bottom:6px;">Name (erscheint im Dateinamen beim Export)</label>
+                <input type="text" id="portfolioName" placeholder="z. B. Maria Muster" style="width:100%;padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.93em;font-family:Arial,Helvetica,sans-serif;color:var(--text);outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+            </div>
+
             <div class="view-toggle-row">
                 <button class="vtbtn active" id="vtSpider" onclick="setView('spider')">🕸 Spider</button>
                 <button class="vtbtn" id="vtKuchen" onclick="setView('kuchen')">🥧 Kuchenstücke</button>
